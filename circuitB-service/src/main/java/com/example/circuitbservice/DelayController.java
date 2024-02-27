@@ -11,7 +11,7 @@ public class DelayController {
 
     @GetMapping("/api/v1/delay")
     public String delayController() throws InterruptedException {
-        Thread.sleep(3000);
+        Thread.sleep(2000);
 
         String now = LocalDateTime.now().toString();
 
