@@ -12,12 +12,25 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class CircuitBreakerController {
 
+    private final CircuitBreakerService circuitBreakerService;
     private final CircuitBClient circuitBClient;
 
     @CircuitBreaker(name = "circuitApiMethod", fallbackMethod = "fallbackMethod")
-    @GetMapping("/api/v1/circuit")
+    @GetMapping
     public String circuitApi() {
-        return circuitBClient.getDelay();
+        String result = callBService();
+
+        circuitBreakerService.extractLog();
+
+        return result;
+    }
+
+    private String callBService() {
+        log.info("start call B service");
+        String delay = circuitBClient.getDelay();
+        log.info("end call B service");
+
+        return delay;
     }
 
     private String fallbackMethod(Throwable throwable) {
